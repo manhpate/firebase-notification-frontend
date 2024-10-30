@@ -4,6 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .register(`${process.env.PUBLIC_URL}/firebase-messaging-sw.js`)
+    .then((registration) => {
+      console.log('Service Worker đăng ký thành công:', registration);
+    })
+    .catch((err) => {
+      console.log('Service Worker đăng ký thất bại:', err);
+    });
+}
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
