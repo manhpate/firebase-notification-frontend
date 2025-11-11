@@ -1,0 +1,28 @@
+name: mac-khong-ky-arm64
+on: { workflow_dispatch: {} }
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: lay_ma_main
+        uses: actions/checkout@v4
+        with: { ref: main }
+
+      - name: cai_node
+        uses: actions/setup-node@v4
+        with: { node-version: 20, cache: npm }
+
+      - name: cai_dep
+        run: npm ci
+
+      - name: chon_env_lan
+        run: cp .env.lan .env
+
+      - name: build_zip_khong_ky
+        env: { CSC_IDENTITY_AUTO: "false", ELECTRON_BUILDER_PUBLISH: "never" }
+        run: npx electron-builder --mac zip --arm64 -p never
+
+      - name: tai_len_tao_pham
+        uses: actions/upload-artifact@v4
+        with: { name: mac-khong-ky-arm64, path: dist/*.zip, if-no-files-found: error }
